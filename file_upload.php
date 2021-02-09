@@ -1,4 +1,5 @@
 <?php
+require_once "./dbc.php";
 // ファイル関連の取得
 $file = $_FILES['img'];
 // var_dump($file);
@@ -9,6 +10,7 @@ $filesize = $file['size'];
 $upload_dir = '/Applications/MAMP/htdocs/upload_test/images/';
 $save_filename = date('YmdHis') . $filename;
 $err_msgs = array();
+$save_path = $upload_dir . $save_filename;
 
 // キャプションを取得
 $caption = filter_input(
@@ -52,8 +54,21 @@ if (!in_array(strtolower($file_ext), $allow_ext)) {
 if (count($err_msgs) === 0) {
   // ファイルが存在するか
   if (is_uploaded_file($tmp_path)) {
-    if (move_uploaded_file($tmp_path, $upload_dir . $save_filename)) {
+    if (move_uploaded_file($tmp_path, $save_path)) {
       echo $filename . 'がアップロードされました';
+      echo '<br>';
+      // DBに保存する処理(ファイル名、ファイルパス、キャプション)
+      // ↓配列に入れる場合
+      // $fileData = array($filename, $save_path, $caption);
+      // $result = $fileSave($fileData);
+      $result = fileSave($filename, $save_path, $caption);
+      if ($result){
+        echo "データベースに保存しました";
+        echo '<br>';
+      }else{
+        echo "データベースへの保存が失敗しました";
+        echo '<br>';
+      }
     } else {
       echo 'ファイルをアップロードできませんでした。';
     }
