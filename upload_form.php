@@ -1,4 +1,6 @@
 <?php
+require_once "./dbc.php";
+$files = getAllFile();
 ?>
 <!-- ①フォームの説明 -->
 <!-- ②$_FILEの確認 -->
@@ -54,5 +56,11 @@
         <input type="submit" value="送信" class="btn" />
       </div>
     </form>
+    <div>
+    <?php foreach($files as $file): ?>
+      <img src="<?php echo "{$file['file_path']}" ?>" alt="">
+      <p><?php echo h("{$file['description']}") ?></p>
+    <?php endforeach; ?>
+    </div>
   </body>
 </html>

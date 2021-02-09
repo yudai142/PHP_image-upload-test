@@ -29,7 +29,7 @@ function dbc(){
 
 function fileSave($filename, $save_path, $caption){
   $result = False;
-  $sql = "INSERT INTO file_db (file_name, file_path, description) VALUE (?, ?, ?)";
+  $sql = "INSERT INTO file_table (file_name, file_path, description) VALUE (?, ?, ?)";
 
   try{
     $stmt = dbc()->prepare($sql);
@@ -43,4 +43,18 @@ function fileSave($filename, $save_path, $caption){
     echo '<br>';
     return $result;
   }
+}
+
+// ファイルデータの取得
+// @return array $fileData
+
+function getAllFile(){
+  $sql = "SELECT * FROM file_table";
+  $fileData = dbc()->query($sql);
+  return $fileData;
+}
+
+// 悪質な入力があった際にエスケープ処理を行う
+function h($s) {
+  return htmlspecialchars($s, ENT_QUOTES, "UTF-8")
 }
